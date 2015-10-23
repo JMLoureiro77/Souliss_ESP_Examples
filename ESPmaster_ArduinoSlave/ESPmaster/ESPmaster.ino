@@ -13,7 +13,7 @@
 
 
 #define XSSID "Radio"
-#define PAS  "AAAAAAAA"  
+#define PASS  "AAAAAAAA"  
 //---------------------------------------------------
 // 2.     Include framework code and libraries
 //---------------------------------------------------
@@ -49,7 +49,7 @@ analog read           4     pin       0(else)
 store variable        5     nVar      value
 get  variable         6     nvar      0(else)
 configure pin         7     pin       confVal
-send eeprom values    8     0         0(else)
+get eeprom values     8     0         0(else)
 clear pinConf         8     1         0(else)
 reset arduino         9     0(else)   0(esle) */
 
@@ -127,7 +127,6 @@ void setup()
    delay(3000);   //wait arduino on
    Serial.println("8.0.0.");//clear arduino pinConf
                             //?ever needed
-   Serial.println("7.14.5.");//conf.A0.analog in
    Serial.println("7.3.3."); //conf.pin5.digOut start high
    Serial.println("7.4.3."); //pin4
    Serial.println("7.5.3.");
