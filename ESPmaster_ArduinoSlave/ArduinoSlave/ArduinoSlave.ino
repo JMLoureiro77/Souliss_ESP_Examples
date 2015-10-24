@@ -164,7 +164,7 @@ void loop() {
         }
         if(inputInt[1]==1){//clear pinConf
           for (int i=2;i<22;i++) {
-            pinConf[i]=0;
+            pinConf[i]=255;
           }
         }
       break;
