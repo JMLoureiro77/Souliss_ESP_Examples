@@ -30,6 +30,14 @@
 #define SLOT3             3
 #define SLOT4             4//&5
 //----------------------------------------------------
+// 5. Pines
+//----------------------------------------------------
+//los que no se definan deben estar a 255 en la funcion como lo que hablamos de "in sketck"
+#define SlavePin3 digital_output
+#define SlavePin4 digital_output
+#define SlavePin5 digital_output
+#define SlavePin6 digital_output
+//----------------------------------------------------
 // 6. Comandos
 //----------------------------------------------------
 bool lastSLOT[4];
@@ -60,11 +68,11 @@ reset arduino         9     0(else)   0(esle) */
 #define store_variable      5
 #define get_variable        6  //x.0
 #define configure_pin       7
-#define send_eeprom_values  8.0.0
-#define clear_pinConf       8.1.0
-#define reset_arduino       9.0.0
-
-bool Arduino(byte command, byte variable = 255, byte option = 255){
+#define get_eeprom_values  8.0.0//ahora solo en SlaveConf()
+#define clear_pinConf       8.1.0//ahora solo en SlaveConf()
+#define reset_arduino       9.0.0//ahora solo en SlaveConf()
+//supongo que se podra aligerar esta parte al dibidir el trabajo en  Slave & SlaveConf
+bool Slave(byte command, byte variable = 255, byte option = 255){//sería cruelhacer que un ruso ecriba "esclavo" sin saber q es
   if(command == send_eeprom_values || command == clear_pinConf || command == reset_arduino) {
     Serial.println(command);
     return 1;
@@ -108,6 +116,7 @@ void setup()
 {
     Initialize();
     SetAPoint();//**************SetAccessPoint*********//
+    SlaveConf();
     SetAsGateway(myvNet_dhcp); 
   //----------------------------------------------------
   //S2. Set vNet Address    
@@ -122,18 +131,6 @@ void setup()
     Set_SimpleLight(SLOT3); 
     Set_T51(SLOT4);
 
-   Serial.begin(9600);
-
-   delay(3000);   //wait arduino on
-   Serial.println("8.0.0.");//clear arduino pinConf
-                            //?ever needed
-   Serial.println("7.14.5.");//conf.A0.analog in
-   Serial.println("7.3.3."); //conf.pin5.digOut start high
-   Serial.println("7.4.3."); //pin4
-   Serial.println("7.5.3.");
-   Serial.println("7.6.3.");
-   Serial.println("9.0.0."); //reset arduino if needed
-   delay(4000); //wait arduino after reset
 }
 
 //=======================================================
@@ -262,4 +259,21 @@ void SetAPoint()
   U16 vNet_address = (U16)ipaddr[i-1];      
   DEFAULT_BASEIPADDRESS[i-1]=0;     
   Souliss_SetAddress(vNet_address, DYNAMICADDR_SUBNETMASK, 0);  
+}
+//============================================================================
+void SlaveConf(){
+   Serial.begin(9600);
+//no se donde hacer los defines para que se sobre-escriban y valgan los del apartado pines
+//los pongo aki de momento
+//#define SlavePin2 255
+//...
+//define SlavePin13 255
+   delay(3000);   //wait arduino on
+   Serial.println("8.1.0.");//get pinConf//se rrellena el array pinConf//hago comit en slave para que clear sea 255
+//if (SlavePin2 == pinConf[2]){}
+//else{pinConf[2]=SlavePin2;
+//    *Serial.print("7.2.")(SlavePin2)("."")}*
+//esto para todos los pines
+   Serial.println("9.0.0."); //reset arduino if needed
+   delay(4000); //wait arduino after reset
 }
