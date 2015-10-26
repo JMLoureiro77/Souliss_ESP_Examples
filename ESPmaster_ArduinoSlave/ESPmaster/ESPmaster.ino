@@ -118,9 +118,7 @@ void loop()
       FAST_50ms() {   
         Logic_SimpleLight(SLOT0);
           if(mOutput(SLOT0)!=lastSLOT0){
-            Serial.print("1.6.");
-            Serial.print(!mOutput(SLOT0));//! Relay(=lowDigOut)
-            Serial.println(".");
+            esclavo(digital_write,6,!mOutput(SLOT0));
             lastSLOT0=mOutput(SLOT0);}
         Logic_SimpleLight(SLOT1);        
           if(mOutput(SLOT1)!=lastSLOT1){
@@ -236,7 +234,8 @@ void SetAPoint()
   Souliss_SetAddress(vNet_address, DYNAMICADDR_SUBNETMASK, 0);  
 }
 
-bool esclavo(byte command, byte variable = 255, byte option = 255){
+//bool esclavo(byte command, byte variable = 255, byte option = 255){
+bool esclavo(byte command, byte variable, byte option){
   if(command == send_eeprom_values || command == clear_pinConf || command == reset_arduino) {
     Serial.println(command);Serial.print(".");
       Serial.print("0");Serial.print(".");
